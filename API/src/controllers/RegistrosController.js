@@ -40,7 +40,7 @@ module.exports = {
         }
         console.log(registro);
         await Registros.update(
-            { data_saida: registro.data_saida, valor_locacao: registro.valor_locacao },
+            { data_saida: registro.data_saida, valor_locacao: registro.valor_locacao, status: 1 },
             { where: { id: registro.id } }
         );
         const reg = await Registros.findOne({ where: { id: registro.id } });

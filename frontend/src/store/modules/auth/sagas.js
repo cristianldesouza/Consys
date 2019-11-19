@@ -34,11 +34,7 @@ export function* signIn({ payload }) {
 export function setToken({ payload }) {
   if (!payload) return;
 
-  const { token } = payload.auth;
-
-  if (token) {
-    api.defaults.headers.esta_logado = true;
-  }
+  api.defaults.headers.esta_logado = true;
 }
 
 export function signOut() {

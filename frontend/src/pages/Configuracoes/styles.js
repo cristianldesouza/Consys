@@ -38,6 +38,11 @@ export const Container = styled.div`
       color: #fff;
       border: none;
       border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    button#quit {
+      background: #ee4e62;
     }
   }
 `;

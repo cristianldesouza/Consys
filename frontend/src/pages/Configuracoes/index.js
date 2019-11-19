@@ -1,24 +1,55 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import { toast } from 'react-toastify';
 
+import * as Yup from 'yup';
+
 import api from '../../services/api';
+import { signOut } from '../../store/modules/auth/actions';
 
 import { Container, Profile } from './styles';
 
-export default function Configuracoes() {
-  const user = useSelector(state => state.user.profile);
+const schema = Yup.object().shape({
+  qtdContainers: Yup.number('A quantidade deve ser numérica')
+    .positive('A quantidade deve ser um número positivo')
+    .required('A quantidade é obrigatória'),
+});
 
-  async function handleSubmit({ qtd_containers }) {
-    try {
-      const response = await api.post('configuracoes', {
-        qtd_containers,
+export default function Configuracoes() {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user.profile);
+  const [initialData, setInitialData] = useState('');
+
+  useEffect(() => {
+    async function loadConfigs() {
+      const response = await api.get('config');
+
+      const { qtd_containers } = response.data;
+
+      setInitialData({
+        qtdContainers: qtd_containers,
       });
+    }
+
+    loadConfigs();
+  }, []); // eslint-disable-line
+
+  async function handleSubmit({ qtdContainers }) {
+    try {
+      const response = await api.post('config', {
+        qtdContainers,
+      });
+
+      toast.success(response.data);
     } catch (err) {
       const { error } = err.response.data;
       toast.error(error);
     }
+  }
+
+  function handleClick() {
+    dispatch(signOut());
   }
 
   return (
@@ -31,11 +62,14 @@ export default function Configuracoes() {
         <strong>{user.usuario}</strong>
       </Profile>
 
-      <Form onSubmit={handleSubmit}>
-        <label htmlFor="qtd_containers">QUANTIDADE DE CONTAINERS</label>
-        <Input name="qtd_containers" type="number" />
+      <Form onSubmit={handleSubmit} schema={schema} initialData={initialData}>
+        <label htmlFor="qtdContainers">QUANTIDADE DE CONTAINERS</label>
+        <Input name="qtdContainers" type="number" />
 
         <button type="submit">Confirmar</button>
+        <button type="button" id="quit" onClick={handleClick}>
+          Sair do Consys
+        </button>
       </Form>
     </Container>
   );

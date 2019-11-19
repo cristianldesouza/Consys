@@ -7,7 +7,7 @@ module.exports = {
         const user = await Usuarios.findOne({ where: { usuario, senha } });
         
         if (user) {
-            return res.status(200).json({ user });
+            return res.status(200).json({ user, esta_logado: true });
         } else {
             return res.status(400).json({error: 'Usuário não existe'});
         }

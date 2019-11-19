@@ -9,7 +9,7 @@ import RegistrosController from '../src/controllers/RegistrosController';
 
 const routes = express.Router();
 
-routes.post('/login', SessionController.store);
+routes.post('/sessions', SessionController.store);
 
 routes.use(authMiddleware);
 

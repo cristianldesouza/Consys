@@ -48,7 +48,7 @@ module.exports = {
     //Obs2: status 0 = somente entreou, status 1 = já saiu
     const registro = {
       id: req.body.id,
-      data_saida: req.body.dataEntrada,
+      data_saida: req.body.dataSaida,
       valor_locacao: req.body.valorLocacao
     };
 

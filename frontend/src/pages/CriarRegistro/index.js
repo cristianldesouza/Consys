@@ -23,10 +23,7 @@ const schema = Yup.object().shape({
     .positive()
     .typeError('Previsão é obrigatória')
     .required(),
-  localizacao: Yup.number()
-    .positive()
-    .typeError('Localização é obrigatória')
-    .required('A previsão é obrigatória'),
+  localizacao: Yup.string().required('A previsão é obrigatória'),
   container_pes: Yup.number()
     .positive()
     .typeError('Pés é obrigatório')

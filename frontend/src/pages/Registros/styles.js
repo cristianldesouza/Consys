@@ -20,6 +20,8 @@ export const Container = styled.div`
   }
 
   div {
+    margin-bottom: 30px;
+
     strong {
       display: block;
       color: #444;

@@ -6,7 +6,7 @@ export default reducers => {
     {
       key: 'consys',
       storage,
-      whitelist: ['auth', 'user'],
+      whitelist: ['auth', 'user', 'register'],
     },
     reducers
   );

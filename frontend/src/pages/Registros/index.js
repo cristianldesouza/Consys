@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 import { pt } from 'date-fns/locale';
 import { MdModeEdit } from 'react-icons/md';
+
 import Navigator from '../../components/Navigator';
 
 import { Container } from './styles';
@@ -11,11 +12,12 @@ import { Container } from './styles';
 import { editRegister } from '../../store/modules/register/actions';
 
 import api from '../../services/api';
+import { formatPrice } from '../../util/formater';
 
 export default function Registros() {
   const dispatch = useDispatch();
-  const [registerIn, setRegisterIn] = useState();
-  const [registerOut, setRegisterOut] = useState();
+  const [registerIn, setRegisterIn] = useState([]);
+  const [registerOut, setRegisterOut] = useState([]);
 
   useEffect(() => {
     async function loadContainers() {
@@ -50,6 +52,7 @@ export default function Registros() {
               "dd 'de' MMMM 'de' yyyy",
               { locale: pt }
             ),
+            valorLocacaoFormatado: formatPrice(register.valor_locacao),
           }))
         );
       }
@@ -70,23 +73,23 @@ export default function Registros() {
         <Navigator path="/novoregistro" text="Cadastrar" icon="MdAdd" />
       </header>
 
-      <div>
-        <strong>ENTRADA</strong>
-        <table>
-          <thead>
-            <tr>
-              <th>ENTRADA EM</th>
-              <th>MOTORISTA</th>
-              <th>CLIENTE</th>
-              <th>PREVISÃO</th>
-              <th>LOCALIZAÇÃO</th>
-              <th>PÉS</th>
-              <th>NÍVEL</th>
-            </tr>
-          </thead>
-          <tbody>
-            {registerIn &&
-              registerIn.map(register => (
+      {registerIn.length > 0 && (
+        <div>
+          <strong>ENTRADA</strong>
+          <table>
+            <thead>
+              <tr>
+                <th>ENTRADA EM</th>
+                <th>MOTORISTA</th>
+                <th>CLIENTE</th>
+                <th>PREVISÃO</th>
+                <th>LOCALIZAÇÃO</th>
+                <th>PÉS</th>
+                <th>NÍVEL</th>
+              </tr>
+            </thead>
+            <tbody>
+              {registerIn.map(register => (
                 <tr key={register.id}>
                   <td>{register.dataEntradaFormatada}</td>
                   <td>{register.motorista.nome}</td>
@@ -105,9 +108,43 @@ export default function Registros() {
                   </td>
                 </tr>
               ))}
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {registerOut.length > 0 && (
+        <div>
+          <strong>SAÍDA</strong>
+          <table>
+            <thead>
+              <tr>
+                <th>SAÍDA EM</th>
+                <th>MOTORISTA</th>
+                <th>CLIENTE</th>
+                <th>VALOR LOCAÇÃO</th>
+                <th>ÚLTIMA LOCALIZAÇÃO</th>
+                <th>PÉS</th>
+                <th>NÍVEL</th>
+              </tr>
+            </thead>
+            <tbody>
+              {registerOut &&
+                registerOut.map(register => (
+                  <tr key={register.id}>
+                    <td>{register.dataSaidaFormatada}</td>
+                    <td>{register.motorista.nome}</td>
+                    <td>{register.cliente.nome_fantasia}</td>
+                    <td>{register.valorLocacaoFormatado}</td>
+                    <td>{register.localizacao}</td>
+                    <td>{register.container_pes}</td>
+                    <td>{register.nivel}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </Container>
   );
 }

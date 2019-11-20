@@ -3,14 +3,13 @@ import { Switch } from 'react-router-dom';
 import Route from './Route';
 
 import SignIn from '../pages/SignIn';
-
 import Registros from '../pages/Registros';
-
+import CriarRegistro from '../pages/CriarRegistro';
+import AtualizarRegistro from '../pages/AtualizarRegistro';
 import Clientes from '../pages/Clientes';
 import CriarCliente from '../pages/CriarCliente';
 import Motoristas from '../pages/Motoristas';
 import CriarMotorista from '../pages/CriarMotorista';
-
 import Configuracoes from '../pages/Configuracoes';
 
 export default function Routes() {
@@ -18,7 +17,12 @@ export default function Routes() {
     <Switch>
       <Route path="/" component={SignIn} exact />
       <Route path="/registros" component={Registros} isPrivate />
-
+      <Route path="/novoregistro" component={CriarRegistro} isPrivate />
+      <Route
+        path="/atualizarregistro"
+        component={AtualizarRegistro}
+        isPrivate
+      />
       <Route path="/clientes" component={Clientes} isPrivate />
       <Route path="/novocliente" component={CriarCliente} isPrivate />
       <Route path="/motoristas" component={Motoristas} isPrivate />

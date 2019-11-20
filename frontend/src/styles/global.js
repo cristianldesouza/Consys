@@ -31,4 +31,8 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+  span {
+    margin: 5px 0;
+    color: #DE6D49
+  }
 `;

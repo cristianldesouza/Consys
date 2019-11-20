@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 790px;
+  width: 980px;
   margin: 20px auto 0;
   padding: 20px 20px;
   background: #fff;
@@ -40,6 +40,10 @@ export const Container = styled.div`
       &:nth-child(4) {
         text-align: center;
       }
+
+      &:nth-child(5) {
+        text-align: center;
+      }
     }
 
     tbody td {
@@ -72,6 +76,10 @@ export const Container = styled.div`
       }
 
       &:nth-child(5) {
+        text-align: center;
+      }
+
+      &:nth-child(6) {
         text-align: right;
       }
     }

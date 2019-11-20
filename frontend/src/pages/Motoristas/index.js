@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
+import { toast } from 'react-toastify';
+import { format, parseISO } from 'date-fns';
+import { pt } from 'date-fns/locale';
+import { MdDelete } from 'react-icons/md';
 import { Container } from './styles';
 import Navigator from '../../components/Navigator';
 
@@ -10,12 +13,33 @@ export default function Motoristas() {
 
   useEffect(() => {
     async function loadDrivers() {
-      const response = api.get('motoristas');
-      setDrivers(response.data);
+      const response = await api.get('motoristas');
+
+      const formatedDrivers = response.data.map(driver => ({
+        ...driver,
+        formatedCreatedAt: format(
+          parseISO(driver.createdAt),
+          "dd 'de' MMMM 'de' yyyy",
+          { locale: pt }
+        ),
+      }));
+
+      setDrivers(formatedDrivers);
     }
 
     loadDrivers();
   }, []); //eslint-disable-line
+
+  async function handleDelete(id) {
+    try {
+      await api.delete(`motoristas/${id}`);
+      setDrivers(drivers.filter(driver => driver.id !== id));
+
+      toast.success('Motorista excluído com sucesso!');
+    } catch (err) {
+      toast.error(err.response.data);
+    }
+  }
 
   return (
     <Container>
@@ -37,12 +61,16 @@ export default function Motoristas() {
         <tbody>
           {drivers &&
             drivers.map(driver => (
-              <tr>
+              <tr key={driver.id}>
                 <td>{driver.nome}</td>
                 <td>{driver.cpf}</td>
                 <td>{driver.telefone}</td>
-                <td>{driver.created_at}</td>
-                <td>excluir</td>
+                <td>{driver.formatedCreatedAt}</td>
+                <td>
+                  <button type="button" onClick={() => handleDelete(driver.id)}>
+                    <MdDelete size={20} />
+                  </button>
+                </td>
               </tr>
             ))}
         </tbody>

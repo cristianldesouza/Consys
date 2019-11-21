@@ -37,7 +37,7 @@ export default function Motoristas() {
 
       toast.success('Motorista excluído com sucesso!');
     } catch (err) {
-      toast.error(err.response.data);
+      toast.error(err.response.data.error);
     }
   }
 

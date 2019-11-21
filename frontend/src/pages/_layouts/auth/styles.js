@@ -33,6 +33,11 @@ export const Content = styled.div`
       font-weight: bold;
       color: #444;
       font-size: 14px;
+
+      > span {
+        color: #444;
+      }
+
       input {
         height: 45px;
         border: 1px solid #ddd;

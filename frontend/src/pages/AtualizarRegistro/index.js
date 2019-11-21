@@ -11,6 +11,7 @@ import CurrencyInput from '../../components/CurrencyInput';
 import { Container } from './styles';
 
 import api from '../../services/api';
+import history from '../../services/history';
 
 const schema = Yup.object().shape({
   dataSaida: Yup.date().required('Data da saída é obrigatório'),
@@ -20,7 +21,7 @@ const schema = Yup.object().shape({
 export default function AtualizarRegistro() {
   const { register } = useSelector(state => state.register);
 
-  async function handleSubmit({ dataSaida, valorLocacao }, { resetForm }) {
+  async function handleSubmit({ dataSaida, valorLocacao }) {
     try {
       await api.post('saida', {
         id: register.id,
@@ -29,7 +30,7 @@ export default function AtualizarRegistro() {
       });
 
       toast.success('Registro atualizado com sucesso!');
-      resetForm();
+      history.push('/registros');
     } catch (err) {
       toast.error('Não foi possível atualiazar');
     }

@@ -2,42 +2,30 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
+
 import Navigator from '../../components/Navigator';
+import FormaterInput from '../../components/FormaterInput';
 
 import { Container } from './styles';
 
 import api from '../../services/api';
+import history from '../../services/history';
 
 const schema = Yup.object().shape({
   nome_fantasia: Yup.string().required('Nome fantasia é obrigatório'),
-  cnpj: Yup.number('Apenas números')
-    .typeError('CNPJ é obrigatório')
-    .test(
-      'len',
-      'CNPJ deve ter 16 dígitos',
-      val => val.toString().length === 16
-    )
-    .positive()
-    .required(),
+  cnpj: Yup.string()
+    .length(14, 'CNPJ deve ter 14 dígitos')
+    .required('CNPJ é obrigatório'),
   email: Yup.string()
     .email('Deve ser um email válido')
     .required('Email é obrigatório'),
-  telefone: Yup.number('Apenas números')
-    .typeError('Telefone é obrigatório')
-    .test(
-      'len',
-      'Telefone deve ter 12 dígitos',
-      val => val.toString().length === 12
-    )
-    .positive()
-    .required(),
+  telefone: Yup.string()
+    .length(12, 'Telefone deve ter 12 digitos')
+    .required('Telefone é obrigatório'),
 });
 
 export default function CriarCliente() {
-  async function handleSubmit(
-    { nome_fantasia, cnpj, email, telefone },
-    { resetForm }
-  ) {
+  async function handleSubmit({ nome_fantasia, cnpj, email, telefone }) {
     try {
       await api.post('clientes', {
         nomeFantasia: nome_fantasia,
@@ -47,7 +35,7 @@ export default function CriarCliente() {
       });
 
       toast.success('Cliente cadastrado com sucesso');
-      resetForm();
+      history.push('/clientes');
     } catch (err) {
       toast.error(err.response.data.error);
     }
@@ -63,16 +51,14 @@ export default function CriarCliente() {
 
       <Form onSubmit={handleSubmit} schema={schema}>
         <label htmlFor="nome_fantasia">NOME FANTASIA</label>
-        <Input name="nome_fantasia" />
+        <Input name="nome_fantasia" placeholder="Digite o nome fantasia" />
 
-        <label htmlFor="cnpj">CNPJ</label>
-        <Input name="cnpj" type="number" />
+        <FormaterInput name="cnpj" label="CNPJ" formatTo="cnpj" />
 
         <label htmlFor="email">EMAIL</label>
-        <Input name="email" type="email" />
+        <Input name="email" type="email" placeholder="Digite o email" />
 
-        <label htmlFor="telefone">TELEFONE</label>
-        <Input name="telefone" type="numer" />
+        <FormaterInput name="telefone" label="TELEFONE" formatTo="telefone" />
 
         <button type="submit">Confirmar</button>
       </Form>

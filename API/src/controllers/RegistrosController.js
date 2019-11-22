@@ -1,6 +1,7 @@
 import Registros from "../models/Registros";
 import Motoristas from "../models/Motoristas";
 import Clientes from "../models/Clientes";
+import Configuracoes from "../models/Configuracoes";
 
 module.exports = {
   async index(req, res) {
@@ -36,11 +37,21 @@ module.exports = {
       usuario_id: 1,
       nivel: req.body.nivel
     };
+    
+    
+    const registros = await Registros.findAll({ where: { status: 0 }});
+    const qtdConfig = await Configuracoes.findAll();
+    console.log(registros.length);
+    console.log(qtdConfig[0].qtd_containers);
+
+    if (registros.length >= qtdConfig[0].qtd_containers) {
+      return res.status(404).json({ status: 'Capacidade máxima de containers configurada atingida.' });
+    }
 
     await Registros.create(registro);
-    const registros = await Registros.findAll();
-
-    return res.status(200).json(registros[registros.length - 1]);
+    const updatedRegistros = await Registros.findAll();
+    
+    return res.status(200).json(updatedRegistros[updatedRegistros.length - 1]);
   },
 
   async saida(req, res) {
